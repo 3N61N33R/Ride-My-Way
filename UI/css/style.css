@@ -1,7 +1,7 @@
 body {
 	font-family: Georgia, serif;
 	margin: 0;
-    background-image: url("../image/road-trip.jpg");
+   /*background-image: url("../image/road-trip.jpg");*/
     
 }
 body,html {
@@ -188,6 +188,40 @@ h1,h2,h3,h4,h5,h6,span {
       border: 1px solid #ccc;
       box-sizing: border-box;
       border-radius: 6px;
+  }
+
+  
+
+  #request-table {
+    width:90%;
+    margin: auto;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    border-radius: 6px;
+    overflow: hidden;
+    border-collapse: collapse;
+  }
+  
+  #request-table td, #request-table th {
+      border: 0;
+      padding: 8px;
+  }
+  
+  #request-table tr:nth-child(even){background-color: #ecf0f1;}
+  
+  #request-table tr:hover {
+    background-color: #ddd;
+    cursor: pointer;
+  }
+  
+  #request-table th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #34495e;
+      color: white;
   }
   
   
