@@ -3,14 +3,9 @@ Application package constructor
 """
 from flask import Flask
 
-from config import CONFIG
+app = Flask(__name__)
 
-def create_app(config_name):
-    """
-    Application Factory
-    """
-    app = Flask(__name__)
-    app.config.from_object(CONFIG[config_name])
+from . import routes
 
 
-    return app
+ 

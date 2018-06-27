@@ -27,7 +27,7 @@ def test_get_one_ride(test_client):
 
         """test to get specific ride"""
 
-        response = test_client.get('/api/v1/rides/10')
+        response = test_client.get('/api/v1/rides/1')
         test_client.assertEqual(response.status_code, 200)
 
 def test_update_ride(test_client):
