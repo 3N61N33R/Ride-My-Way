@@ -1,10 +1,8 @@
-from app import app
+from app import app 
 
 import json
 
-#def setUp(test_client):
-        #testing = True
-        #test_client =.test_client()
+
 
 def test_create_user(test_client):
         user = {"username":"gray", "email":"email@gmail.com","password":"bistro5"}
