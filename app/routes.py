@@ -24,9 +24,7 @@ def create_ride():
     name = data['name']
     pickup = data['pickup']
     dropoff = data['dropoff']
-    time = data['time']
-    
-    
+    time = data['time']    
 
     ride = Ride( name = name, pickup = pickup , dropoff = dropoff,  time=time)
     ride.add()
@@ -39,18 +37,16 @@ def create_ride():
 def get_rides():
     r = Ride()
     rides =  r.get_all()
-    # print(rides)
 
     return jsonify({'rides': rides})
 
 
-@app.route('/api/v1/rides/1')
-def get_ride():
+@app.route('/api/v1/ride/<int:id>')
+def get_ride(id):
     r = Ride()
-    rides =  r.get_all()
-    # print(rides)
+    ride =  r.get_one(id)
 
-    return jsonify({'rides': rides})
+    return jsonify({'ride': ride})
     
 
 

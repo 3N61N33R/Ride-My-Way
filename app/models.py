@@ -44,14 +44,20 @@ class Ride:
         for ride in rides:
             _rides.append(self.serialize(ride))
         return _rides
+
+    def get_one(self, id):
+        for ride in rides:
+            if ride.id == id: 
+                return self.serialize(ride)
+        return None
     
     def serialize(self,ride):
         return {
-            "name": self.name,
-            "pickup": self.pickup,
-            "dropoff": self.dropoff,
-            "time": self.time,
-            "id":self.id
+            "name": ride.name,
+            "pickup": ride.pickup,
+            "dropoff": ride.dropoff,
+            "time": ride.time,
+            "id":ride.id
 
         }
 
