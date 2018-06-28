@@ -1,6 +1,6 @@
-from flask import request, jsonify, make_response
+from flask import request, jsonify, make_response, abort
 import json 
-from .models import User, Ride
+from .models import User, Ride, Request, rides
 from . import app
 
 
@@ -46,18 +46,85 @@ def get_ride(id):
     trip = Ride()
     ride =  trip.get_one(id)
 
-    return jsonify({'ride': ride})
+    return jsonify({'ride': ride.serialize()})
+
+
+@app.route('/api/v1/ride/<int:id>',  methods = ['PUT'])
+def update_ride(id):
+    data = request.get_json()
+    pickup = data.get('pickup', None)
+    dropoff = data.get('dropoff', None)
+    time = data.get('time', None)
+
+    ride = get_ride(id)
+    if not ride:
+        return abort(404)
+    index = rides.index(ride)
+    if pickup:
+        rides[index].pickup = pickup
+    if dropoff:
+        rides[index].dropoff = dropoff
+    if time:
+        rides[index].time = time
+
+    return (jsonify({
+                "message" : "Ride updated successfully"}), 201)
+
 
 @app.route('/api/v1/ride/<int:id>',  methods = ['DELETE'])
 def delete_ride(id):
-    trip = Ride()
-    ride =  trip.delete(id)
+    r = Ride()
+    if r.delete(id):
+        return (jsonify({
+                "message" : "Ride deleted successfully"}), 200)
+    return abort(404)
+
+
+""" endpoints for requests"""
+
+@app.route('/api/v1/ride/<int:id>/request',  methods = ['POST'])
+def create_request(id):
+    data = request.get_json()
+    name = data['name']
+    ride = Ride().get_one(id)
+    if not ride:
+        return abort(404)
+
+    req = Request(name = name, ride=ride)
+    req.add()
 
     return (jsonify({
-                "message" : "Ride deleted successfully"}), 201)
+                "message" : "Request made successfully"}), 201)  
 
 
-    
+@app.route('/api/v1/ride/<int:id>/requests')
+def get_requests(id):
+    query = Request()
+    requests = query.get_all_requests(id)
+
+    return jsonify({'requests': requests})
+
+
+@app.route('/api/v1/ride/<int:ride_id>/request/<int:request_id>')
+def get_request(ride_id, request_id):
+    query = Request()
+    request = query.get_one_request(ride_id, request_id)
+    if not request:
+        return abort(404)
+
+    return jsonify({'request': request})
+
+
+@app.route('/api/v1/ride/<int:ride_id>/request/<int:request_id>',  methods = ['DELETE'])
+def delete_request(ride_id, request_id):
+    query = Request()
+    request = query.get_one_request(ride_id, request_id)
+    if not request:
+        return abort(404)
+    rides.remove(request)
+
+    return (jsonify({
+                "message" : "Request made successfully"}), 200)
 
 
 
