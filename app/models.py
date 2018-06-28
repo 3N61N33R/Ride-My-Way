@@ -61,3 +61,10 @@ class Ride:
 
         }
 
+    def delete(self, id):
+        for ride in rides:
+            if ride.id == id:
+                ride.remove(rides)
+                
+
+
