@@ -1,6 +1,6 @@
 from flask import request, jsonify, make_response, abort
 import json 
-from .models import User, Ride, Request, rides
+from .models import User, Ride, Request, rides, requests
 from . import app
 
 
@@ -41,7 +41,7 @@ def get_rides():
     return jsonify({'rides': rides})
 
 
-@app.route('/api/v1/ride/<int:id>')
+@app.route('/api/v1/ride/<int:id>', methods = ['GET'])
 def get_ride(id):
     trip = Ride()
     ride =  trip.get_one(id)
@@ -55,11 +55,11 @@ def update_ride(id):
     pickup = data.get('pickup', None)
     dropoff = data.get('dropoff', None)
     time = data.get('time', None)
-
-    ride = get_ride(id)
+    ride = Ride().get_one(id)
     if not ride:
         return abort(404)
     index = rides.index(ride)
+    print(index)
     if pickup:
         rides[index].pickup = pickup
     if dropoff:
@@ -87,6 +87,7 @@ def create_request(id):
     data = request.get_json()
     name = data['name']
     ride = Ride().get_one(id)
+    print(rides[0].id)
     if not ride:
         return abort(404)
 
@@ -112,7 +113,7 @@ def get_request(ride_id, request_id):
     if not request:
         return abort(404)
 
-    return jsonify({'request': request})
+    return jsonify({'request': request.serialize()})
 
 
 @app.route('/api/v1/ride/<int:ride_id>/request/<int:request_id>',  methods = ['DELETE'])
@@ -121,10 +122,10 @@ def delete_request(ride_id, request_id):
     request = query.get_one_request(ride_id, request_id)
     if not request:
         return abort(404)
-    rides.remove(request)
+    requests.remove(request)
 
     return (jsonify({
-                "message" : "Request made successfully"}), 200)
+                "message" : "Request deleted successfully"}), 200)
 
 
 

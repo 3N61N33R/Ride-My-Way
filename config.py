@@ -14,7 +14,7 @@ class DevelopmentConfig(Config):
     """
     Development configurations
     """
-    pass
+    DEBUG = True
 
 class TestingConfig(Config):
     """
@@ -32,6 +32,5 @@ CONFIG = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
     'default': DevelopmentConfig
 }
