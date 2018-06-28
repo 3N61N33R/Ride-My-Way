@@ -35,18 +35,28 @@ def create_ride():
 
 @app.route('/api/v1/rides')
 def get_rides():
-    r = Ride()
-    rides =  r.get_all()
+    trip = Ride()
+    rides =  trip.get_all()
 
     return jsonify({'rides': rides})
 
 
 @app.route('/api/v1/ride/<int:id>')
 def get_ride(id):
-    r = Ride()
-    ride =  r.get_one(id)
+    trip = Ride()
+    ride =  trip.get_one(id)
 
     return jsonify({'ride': ride})
+
+@app.route('/api/v1/ride/<int:id>',  methods = ['DELETE'])
+def delete_ride(id):
+    trip = Ride()
+    ride =  trip.delete(id)
+
+    return (jsonify({
+                "message" : "Ride deleted successfully"}), 201)
+
+
     
 
 
