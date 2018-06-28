@@ -1,5 +1,6 @@
 users = []
 rides = []
+requests = []
 
 class User:
     def __init__(self, name, username,email,password):
@@ -37,34 +38,88 @@ class Ride:
         rides.append(self)
 
         for ride in rides:
-            print(self.serialize(ride))
+            print(ride.serialize())
 
     def get_all(self):
         _rides = []
         for ride in rides:
-            _rides.append(self.serialize(ride))
+            _rides.append(ride.serialize())
         return _rides
 
     def get_one(self, id):
         for ride in rides:
             if ride.id == id: 
-                return self.serialize(ride)
+                return ride
         return None
-    
-    def serialize(self,ride):
+
+    def serialize(self):
         return {
-            "name": ride.name,
-            "pickup": ride.pickup,
-            "dropoff": ride.dropoff,
-            "time": ride.time,
-            "id":ride.id
+            "name": self.name,
+            "pickup": self.pickup,
+            "dropoff": self.dropoff,
+            "time": self.time,
+            "id":self.id
 
         }
 
-    def delete(self, id):
-        for ride in rides:
-            if ride.id == id:
-                ride.remove(rides)
+    def delete(self, ride_id):
+        ride = self.get_one(ride_id)
+        if ride:
+            rides.remove(ride)
+            return True 
+        return False
+
+class Request:
+    request_id = 1
+    def __init__(self, name=None, ride =None):
+        self.name = name
+        self.ride = ride
+        self.id = Request.request_id
+
+        Request.request_id
+
+    def add(self):
+        requests.append(self)
+
+    
+    def get_all_requests(self, id ):
+        _requests = []
+        for request in requests:
+            if request.ride.id == id:
+                 _requests.append(request.serialize())
+        return _requests
+
+    
+    def serialize(self):
+        return {
+            "name": self.name,
+            'ride': self.ride.serialize(),
+            "id" :self.id
+
+        }
+
+    def get_one_request(self, ride_id, request_id):
+        for request in requests:
+            if request.id == request_id and request.ride.id == ride_id: 
+                return request
+        return None
+
+    
+
+        
+
+        
+    
+
+    
+
+
                 
+                
+    
+
+        
+
+ 
 
 
