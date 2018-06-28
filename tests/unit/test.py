@@ -42,6 +42,12 @@ def test_delete_ride(test_client):
         response = test_client.delete('/api/v1/rides/1')
         test_client.assertEqual(response.status_code, 200)
 
+def test_create_request(test_client):
+        request = {"name":"annie", "pickup":"greenfields","drop_off":"fedha"}
+        response = test_client.post('/api/v1/rides/1/requests', data = json.dumps(ride), content_type = 'application/json')
+        test_client.assertEqual(response.status_code, 201)
+
+
 def test_get_request(test_client):
 
         """test to fetch all ride requests"""
