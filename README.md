@@ -53,10 +53,10 @@ Screenshot from postman
 #### GET/api/v1/rides : gets all ride offers
 ![Alt postman](/screenshots/getrides.png)
 
-#### GET/api/v1/rides/<ride-id> : gets a ride offer
+#### GET/api/v1/ride/<ride-id> : gets a ride offer
 ![Alt postman](/screenshots/getride.png)
 
-#### DELETE/api/v1/rides : delete a ride offer
+#### DELETE/api/v1/ride/<ride-id> : delete a ride offer
 
 ![Alt postman](/screenshots/del1.png)
 ![Alt postman](/screenshots/del2.png)
