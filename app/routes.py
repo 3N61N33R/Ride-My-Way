@@ -59,7 +59,7 @@ def update_ride(id):
     if not ride:
         return abort(404)
     index = rides.index(ride)
-    print(index)
+    
     if pickup:
         rides[index].pickup = pickup
     if dropoff:
@@ -87,7 +87,7 @@ def create_request(id):
     data = request.get_json()
     name = data['name']
     ride = Ride().get_one(id)
-    print(rides[0].id)
+    
     if not ride:
         return abort(404)
 
