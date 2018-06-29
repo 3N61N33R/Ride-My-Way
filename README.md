@@ -47,7 +47,20 @@ Get the app running by typing `python run.py`
 #### Test API endpoints
 Fire up Postman to test the endpoints. 
 Screenshot from postman
-![Alt postman](/screenshots/postman.png)
+#### POST/api/v1/rides : creates a ride offer
+![Alt postman](/screenshots/createride.png)
+
+#### GET/api/v1/rides : gets all ride offers
+![Alt postman](/screenshots/getrides.png)
+
+#### GET/api/v1/rides/<ride-id> : gets a ride offer
+![Alt postman](/screenshots/getride.png)
+
+#### DELETE/api/v1/rides : delete a ride offer
+
+![Alt postman](/screenshots/del1.png)
+![Alt postman](/screenshots/del2.png)
+![Alt postman](/screenshots/deleted.png)
 
 
 
