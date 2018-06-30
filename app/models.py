@@ -49,6 +49,7 @@ class Ride:
     def get_one(self, id):
         for ride in rides:
             if ride.id == id: 
+                
                 return ride
         return None
 
@@ -76,7 +77,7 @@ class Request:
         self.ride = ride
         self.id = Request.request_id
 
-        Request.request_id
+        Request.request_id +=1
 
     def add(self):
         requests.append(self)
