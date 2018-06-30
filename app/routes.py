@@ -7,30 +7,42 @@ from . import app
 @app.route('/api/v1/users', methods = ['POST'])
 def create_user():
     data = request.get_json()
-    username = data['username']
-    name = data['name']
-    email = data['email']
-    password = data['password']
-
-    user = User(name=name, username=username, email=email, password=password)
-    user.add()
-    return jsonify({
+    username = data.get('username')
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+    if username is not None and email is not None and name is not None and password is not None:
+        user = User(name=name, username=username, email=email, password=password)
+        user.add()
+        return jsonify({
                 "message" : "Account created successfully"}), 201
-
+    else:
+        return jsonify({
+                "message" : "Please fill in all the fields"}), 201
+    
 
 @app.route('/api/v1/rides',  methods = ['POST'])
 def create_ride():
     data = request.get_json()
-    name = data['name']
-    pickup = data['pickup']
-    dropoff = data['dropoff']
-    time = data['time']    
+    name = data.get('name')
+    pickup = data.get('pickup')
+    dropoff = data.get('dropoff')
+    time = data.get('time')  
 
-    ride = Ride( name = name, pickup = pickup , dropoff = dropoff,  time=time)
-    ride.add()
+    if name is not None and pickup is not None and dropoff is not None and time is not None:
 
-    return (jsonify({
-                "message" : "Ride created successfully"}), 201)
+
+        ride = Ride( name = name, pickup = pickup , dropoff = dropoff,  time=time)
+        ride.add()
+
+        return jsonify({
+                "message" : "Ride created successfully"}), 201
+
+    else:
+        return jsonify({
+                "message" : "Please fill in all the fields"}), 201
+
+
 
 
 @app.route('/api/v1/rides')
@@ -45,6 +57,9 @@ def get_rides():
 def get_ride(id):
     trip = Ride()
     ride =  trip.get_one(id)
+
+    if not ride:
+        return jsonify({"message": "Ride does not exist"}), 404
 
     return jsonify({'ride': ride.serialize()})
 
