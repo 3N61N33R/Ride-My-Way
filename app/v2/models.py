@@ -36,6 +36,7 @@ class User(DB):
     def check_password(self, password):
         # TODO password hashing
         return check_password_hash(self.password, password)
+    
     def create(self):
         self.cur.execute("""CREATE TABLE IF NOT EXISTS users(
             id SERIAL PRIMARY KEY NOT NULL,
@@ -81,126 +82,7 @@ class User(DB):
             "email": self.email
         }
 
-class Ride(DB):
-    def __init__(self, driver=None, pickup=None, dropoff=None,time=None):
-        super().__init__()
-        self.driver = driver
-        self.pickup = pickup
-        self.dropoff = dropoff
-        self.time = time
-        self.id = None
 
-    def create(self):
-        self.cur.execute("""CREATE TABLE IF NOT EXISTS rides (
-            id SERIAL PRIMARY KEY NOT NULL,
-            driver_id INTEGER NOT NULL,
-            pickup VARCHAR(50) NOT NULL,
-            dropoff VARCHAR(50) NOT NULL,
-            time TIMESTAMP NOT NULL,
-            FOREIGN KEY (driver_id) REFERENCES users (id)
-        );
-        """)
-        self.commit()
-
-    def add(self):
-        self.cur.execute("INSERT INTO rides (driver_id, pickup, dropoff, time) VALUES (%s, %s, %s, %s)", (self.driver.id, self.pickup, self.dropoff, self.time))
-        self.commit()
-
-    def get_all(self):
-        self.cur.execute("select * from rides")
-        rides = self.all()
-
-        if not rides:
-            return None
-        return [self.make_ride(ride) for ride in rides]
-        
-    def get_one(self, id):
-        self.cur.execute("select * from rides where id=%s", (str(id)))
-        ride = self.get()
-
-        return self.make_ride(ride) if ride else None
-
-    def update(self):
-        self.cur.execute("UPDATE rides SET pickup=%s, dropoff=%s, time=%s where id=%s", (self.pickup, self.dropoff, self.time, self.id))
-        self.commit()
-        # try cool stuff
-        # 
-    def make_ride(self, ride):
-        self.id = ride[0]
-        self.driver = User().get_by_id(ride[1])
-        self.pickup = ride[2]
-        self.dropoff = ride[3] 
-        self.time = ride[4]
-
-        return self
-
-    def serialize(self):
-        return {
-            "driver": self.driver.serialize(),
-            "pickup": self.pickup,
-            "dropoff": self.dropoff,
-            "time": self.time,
-            "id":self.id
-
-        }
-
-    def delete(self, ride_id):
-        self.cur.execute("DELETE FROM rides WHERE id=%s", str(ride_id))
-        self.commit()
-        # Cool staff here
-
-class Request(DB):
-    def __init__(self, user=None, ride =None):
-        super().__init__()
-        self.user = user
-        self.ride = ride
-        self.request_status = "pending"
-    
-    def create(self):
-        self.cur.execute("""CREATE TABLE IF NOT EXISTS ride_requests(
-            id SERIAL PRIMARY KEY NOT NULL, 
-            ride_id INT NOT NULL, 
-            requestor_id INT NOT NULL, 
-            request_status VARCHAR(140) NOT NULL,
-            FOREIGN KEY (ride_id) REFERENCES rides (id),
-            FOREIGN KEY (requestor_id) REFERENCES users (id)
-        );
-        """)
-
-        self.commit()
-
-    def add(self):
-        self.cur.execute("INSERT INTO ride_requests (ride_id, requestor_id, request_status) VALUES (%s, %s, %s)", (self.ride.id, self.user.id, self.request_status))
-        self.commit()
-    
-    def get_all_requests(self, id):
-        self.cur.execute("select (id, ride_id, requestor_id,request_status) from ride_requests where ride_id=%s", (str(id)))
-        request_ride = self.all()
-        return [self.make_request(request) for request in request_ride]
-
-    def make_request(self, request_ride):
-        print(request_ride)
-        self.id = request_ride[0][0]
-        self.ride = Ride().get_one(request_ride[0][1])
-        self.user = User().get_by_id(request_ride[0][1])
-        self.request_status = request_ride[0][1]
-
-        return self
-    
-    def serialize(self):
-        return {
-            "user": self.user.serialize(),
-            'ride': self.ride.serialize(),
-            "request_status":self.request_status,
-            "id" :self.id
-
-        }
-
-    def get_one_request(self, ride_id, request_id):
-        self.cur.execute("select * from ride_requests where ride_id=%s and id=%s", (str(ride_id), str(request_id)))
-        request_ride = self.get()
-
-        return self.make_request(request_ride)
     
 
         
