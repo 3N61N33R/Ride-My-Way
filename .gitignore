@@ -5,3 +5,4 @@ __pycache__
 venv
 __pycache__/
 .cache/
+.cache/v/cache
