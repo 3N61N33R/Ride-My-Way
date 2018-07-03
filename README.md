@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/MissGray/Ride-My-Way.svg?branch=develop)](https://travis-ci.org/MissGray/Ride-My-Way)
+[![Coverage Status](https://coveralls.io/repos/github/MissGray/Ride-My-Way/badge.svg?branch=develop)](https://coveralls.io/github/MissGray/Ride-My-Way?branch=develop)
+
+
 # Ride-My-Way
 
 Ride-my App is a carpooling application that provides drivers with the ability to create ride offers
@@ -41,7 +45,20 @@ Get the app running by typing `python run.py`
 #### Test API endpoints
 Fire up Postman to test the endpoints. 
 Screenshot from postman
-![Alt postman](/screenshots/postman.png)
+#### POST/api/v1/rides : creates a ride offer
+![Alt postman](/screenshots/createride.png)
+
+#### GET/api/v1/rides : gets all ride offers
+![Alt postman](/screenshots/getrides.png)
+
+#### GET/api/v1/ride/<ride-id> : gets a ride offer
+![Alt postman](/screenshots/getride.png)
+
+#### DELETE/api/v1/ride/<ride-id> : delete a ride offer
+
+![Alt postman](/screenshots/del1.png)
+![Alt postman](/screenshots/del2.png)
+![Alt postman](/screenshots/deleted.png)
 
 
 
