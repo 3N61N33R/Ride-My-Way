@@ -25,6 +25,22 @@ def create_user():
 
 @app.route('/api/v1/rides',  methods = ['POST'])
 def create_ride():
+
+     """
+    Endpoint for creating a ride
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: Ride not created successfuly'
+    """
     data = request.get_json()
     name = data.get('name')
     pickup = data.get('pickup')
@@ -49,6 +65,21 @@ def create_ride():
 
 @app.route('/api/v1/rides')
 def get_rides():
+    """
+    Endpoint for getting rides
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There are no rides to display'
+    """
     trip = Ride()
     rides =  trip.get_all()
 
@@ -57,6 +88,21 @@ def get_rides():
 
 @app.route('/api/v1/ride/<int:id>', methods = ['GET'])
 def get_ride(id):
+    """
+    Endpoint for getting a ride
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There is no ride to display'
+    """
     trip = Ride()
     ride =  trip.get_one(id)
 
@@ -90,6 +136,21 @@ def update_ride(id):
 
 @app.route('/api/v1/ride/<int:id>',  methods = ['DELETE'])
 def delete_ride(id):
+    """
+    Endpoint for deleting a ride
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There are no rides to display'
+    """
     r = Ride()
     if r.delete(id):
         return (jsonify({
@@ -125,6 +186,24 @@ def get_requests(id):
 
 @app.route('/api/v1/ride/<int:ride_id>/request/<int:request_id>')
 def get_request(ride_id, request_id):
+    """
+    Endpoint for getting a single request for a particular ride
+    ---
+    tags:
+      - Request
+    parameters:
+      - name: ride_id
+        in: path
+        required: true
+      - name: request_id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There is no request for that ride'
+    """
     query = Request()
     request = query.get_one_request(ride_id, request_id)
     if not request:
