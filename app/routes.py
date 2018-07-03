@@ -1,5 +1,6 @@
 from flask import request, jsonify, make_response, abort
 import json 
+from validate_email import validate_email
 from .models import User, Ride, Request, rides, requests
 from . import app
 
@@ -11,14 +12,15 @@ def create_user():
     name = data.get('name')
     email = data.get('email')
     password = data.get('password')
-    if username is not None and email is not None and name is not None and password is not None:
-        user = User(name=name, username=username, email=email, password=password)
-        user.add()
-        return jsonify({
-                "message" : "Account created successfully"}), 201
-    else:
-        return jsonify({
-                "message" : "Please fill in all the fields"}), 201
+    
+    
+    if not all([username,name,email,password]):
+        return jsonify({"message" : "Please fill in all the fields"}), 400
+    if not validate_email(email):
+        return jsonify({"message" : "Please input a valid email"}), 400
+    return jsonify({"message" : "Account created successfully"}), 201
+    
+    
     
 
 @app.route('/api/v1/rides',  methods = ['POST'])
