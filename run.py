@@ -8,4 +8,3 @@ def create():
     User().create()
     Ride().create()
     Request().create()
-

@@ -1,4 +1,4 @@
-from flask import request, jsonify, abort
+from flask import request, jsonify 
 from flask_jwt_extended import (create_access_token)
 from validate_email import validate_email
 from .models import User
@@ -21,7 +21,7 @@ def create_user():
         return jsonify({"message" : "Please enter a valid email"}), 400
     if password is not None and password.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
-  
+
     user = User(name=name, username=username, email=email, password=password)
     user.add()
     return jsonify({"message" : "Account created successfully"}), 201
