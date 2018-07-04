@@ -1,6 +1,10 @@
 """App entry point"""
+from app.v2.models import User, Ride, Request
 from app import app
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.cli.command()
+def create():
+    ''' Create all db tables '''
+    User().create()
+    Ride().create()
+    Request().create()
