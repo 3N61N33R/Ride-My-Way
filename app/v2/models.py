@@ -19,7 +19,7 @@ class DB:
         return self.cur.fetchone()
 
     def all(self):
-        return self.cur.fetchall() 
+        return self.cur.fetchall()
 
     def close(self):
         self.cur.close()
@@ -36,7 +36,7 @@ class User(DB):
     def check_password(self, password):
         # TODO password hashing
         return check_password_hash(self.password, password)
-    
+
     def create(self):
         self.cur.execute("""CREATE TABLE IF NOT EXISTS users(
             id SERIAL PRIMARY KEY NOT NULL,
@@ -70,7 +70,7 @@ class User(DB):
         self.id = user[0]
         self.name = user[1]
         self.username = user[2]
-        self.email = user[3] 
+        self.email = user[3]
         self.password = user[4]
 
         return self
