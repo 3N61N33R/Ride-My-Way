@@ -52,7 +52,7 @@ class User(DB):
         self.cur.execute("INSERT INTO users (name, username, email, password) VALUES (%s, %s, %s, %s)", (self.name, self.username, self.email, self.password))
         self.commit()
 
-    def get_by_id(self, id):
+    def get_by_id(self, _id):
         self.cur.execute("select * from users where id=%s", (id,))
         self.commit()
         user = self.get()

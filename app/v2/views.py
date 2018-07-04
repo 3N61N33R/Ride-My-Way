@@ -13,11 +13,19 @@ def create_user():
     email = data.get('email')
     password = data.get('password')
 
-    if not all([username,name,email,password]):
+    if username is not None and username.strip() == "":
+        return jsonify({"message" : "Please fill in all the fields"}), 400
+    if name is not None and name.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
     if not validate_email(email):
-        return jsonify({"message" : "Please input a valid email"}), 400
+        return jsonify({"message" : "Please enter a valid email"}), 400
+    if password is not None and password.strip() == "":
+        return jsonify({"message" : "Please fill in all the fields"}), 400
+  
+    user = User(name=name, username=username, email=email, password=password)
+    user.add()
     return jsonify({"message" : "Account created successfully"}), 201
+    
 
 
 @v2.route('/api/v2/auth/login', methods = ['POST'])
