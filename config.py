@@ -8,7 +8,7 @@ class Config:
     Common configurations
     """ 
     DEBUG = True
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = "txex"
     DBNAME = "ride_my_way"
     DBUSER = "zawi"
     DBPASSWORD = "password"
