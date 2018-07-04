@@ -81,24 +81,3 @@ class User(DB):
             "username": self.username,
             "email": self.email
         }
-
-
-    
-
-        
-
-        
-    
-
-    
-
-
-                
-                
-    
-
-        
-
- 
-
-

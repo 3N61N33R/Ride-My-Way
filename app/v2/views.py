@@ -1,10 +1,5 @@
-from flask import request, jsonify, make_response, abort
-import json 
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity, create_access_token
-
-)
+from flask import request, jsonify, abort
+from flask_jwt_extended import (create_access_token)
 from validate_email import validate_email
 from .models import User
 from . import v2
@@ -24,13 +19,13 @@ def create_user():
         return jsonify({"message" : "Please input a valid email"}), 400
     return jsonify({"message" : "Account created successfully"}), 201
 
-    
+
 @v2.route('/api/v2/auth/login', methods = ['POST'])
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
+    username = request.json.get('username')
+    password = request.json.get('password')
     if not username:
         return jsonify({"msg": "Missing username parameter"}), 400
     if not password:
