@@ -26,7 +26,7 @@ def create_user():
 @app.route('/api/v1/rides',  methods = ['POST'])
 def create_ride():
 
-     """
+    """
     Endpoint for creating a ride
     ---
     tags:
