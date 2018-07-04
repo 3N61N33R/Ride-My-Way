@@ -116,6 +116,9 @@ def update_ride(id):
     if time:
         ride.time = time
 
+    
+    
+    ride.update()
     return (jsonify({
                 "message" : "Ride updated successfully"}), 201)
 
