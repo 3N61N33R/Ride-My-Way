@@ -96,13 +96,14 @@ class Ride(DB):
             pickup VARCHAR(50) NOT NULL,
             dropoff VARCHAR(50) NOT NULL,
             time TIMESTAMP NOT NULL,
-            FOREIGN KEY (driver_id) REFERENCES users (id)
+            FOREIGN KEY (driver_id) REFERENCES users (id) ON DELETE CASCADE
         );
         """)
         self.commit()
 
     def add(self, _id):
-        self.cur.execute("INSERT INTO rides (driver_id, pickup, dropoff, time) VALUES (%s, %s, %s, %s)", (id, self.pickup, self.dropoff, self.time))
+        
+        self.cur.execute("INSERT INTO rides (driver_id, pickup, dropoff, time) VALUES (%s, %s, %s, %s)", (_id, self.pickup, self.dropoff, self.time))
         self.commit()
 
     def get_all(self):
@@ -118,6 +119,18 @@ class Ride(DB):
         ride = self.get()
 
         return self.make_ride(ride) if ride else None
+
+    def get_by_user(self, user):
+        self.cur.execute("SELECT * from rides where driver_id =%s", (user,))
+        rides = self.all()
+
+        if not rides:
+            return None
+        return [self.make_ride(ride) for ride in rides]
+
+
+
+     
 
     def update(self):
         self.cur.execute("UPDATE rides SET pickup=%s, dropoff=%s, time=%s where id=%s", (self.pickup, self.dropoff, self.time, self.id))
@@ -144,7 +157,7 @@ class Ride(DB):
         }
 
     def delete(self, ride_id):
-        self.cur.execute("DELETE FROM rides WHERE id=%s", (ride_id,))
+        self.cur.execute("DELETE FROM rides WHERE id=%s;", (ride_id,))
         self.commit()
         
 
