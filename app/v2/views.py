@@ -2,7 +2,8 @@ from flask import request, jsonify, abort
 from datetime import datetime
 from dateutil import parser
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
-from .models import User, Ride
+from validate_email import validate_email
+from .models import User, Ride, Request
 from . import v2
 import re
 
@@ -53,7 +54,7 @@ def login():
         return jsonify({"msg":"Invalid username or password"}), 401
     
     # Identity can be any data that is json serializable
-    access_token = create_access_token(identity=user.username)
+    access_token = create_access_token(identity=user.username, expires_delta=False)
     return jsonify(access_token=access_token), 200
 
 
@@ -95,9 +96,8 @@ def create_ride():
         return jsonify({"message" : "Please fill in all the fields"}), 400
 
     ride = Ride(pickup = pickup , dropoff = dropoff,  time=time)
-    ride.add(driver.id)
-    return jsonify({
-                "message" : "Ride created successfully"}), 201
+    ride.add(driver.get_by_username(username).id)
+    return jsonify({"message" : "Ride created successfully"}), 201
 
 
 @v2.route('/api/v2/rides')
@@ -105,9 +105,7 @@ def create_ride():
 def get_rides():
     trip = Ride()
     
-    return jsonify({
-        'rides':
-         [ride.serialize() for ride in trip.get_all()]})
+    return jsonify({'rides':[ride.serialize() for ride in trip.get_all()]})
 
 
 @v2.route('/api/v2/ride/<int:id>', methods = ['GET'])
@@ -155,6 +153,32 @@ def delete_ride(id):
         r.delete(id)
         return (jsonify({"message" : "Ride deleted successfully"}), 200)
     return (jsonify({"message" : "Ride delete failed"}), 400)
+
+@v2.route('/api/v2/ride/<int:id>/request', methods = ['POST'])
+@jwt_required
+def create_request(id):
+    ride = Ride().get_one(id)
+
+    username = get_jwt_identity()
+    user = User()
+    user.get_by_username(username).id
+
+    if not ride:
+        return jsonify({"message" : "Ride does not exist"}), 400
+
+
+    req = Request(ride= ride , user = user)
+    req.add()
+    return jsonify({"message" : "Request made successfully" }), 201
+
+@v2.route('/api/v2/ride/<int:id>/requests')
+@jwt_required
+def get_requests(id):
+    query = Request()
+    
+    return jsonify({'requests':[request for request in query.get_all_requests(id)]})
+
+
 
 
 
