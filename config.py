@@ -24,6 +24,8 @@ class TestingConfig(Config):
     Testing configurations
     """
     TESTING = True
+    DBNAME = "testdb"
+    DBUSER = "postgres"
 
 class ProductionConfig(Config):
     """
