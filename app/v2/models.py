@@ -29,6 +29,7 @@ class User(DB):
         self.username = username
         self.email = email
         self.password = generate_password_hash(password) if password else None
+        self.create()
 
     def check_password(self, password):
         # TODO password hashing
