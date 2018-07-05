@@ -24,7 +24,7 @@ def create_user():
     if name is not None and name.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
 
-    EMAIL_REGEX = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$]")
+    EMAIL_REGEX = re.compile(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
     if not EMAIL_REGEX.match(email):
         return jsonify({"message" : "Please enter a valid email"}), 400
 
@@ -72,18 +72,18 @@ def create_ride():
     if not driver:
         return jsonify({"message" : "Invalid driver"}), 400
 
-    # s_time = datetime.strptime(time, "%Y-%m-%d %H:%M%S")
+    
     s_time = parser.parse(time)
     if s_time < datetime.now():
-        return jsonify({"message":"Camt post in the poast"})
+        return jsonify({"message":"Can't post in the past"})
     driver_rides = Ride()
     driveride = driver_rides.get_by_user(driver.id)
     if driveride:
         for ride in driveride:
-            # d_time = parser.parse(ride.time)
+            
             diff = s_time - ride.time
             if diff.seconds < 18000:
-                return jsonify({"meaasge":"exapil"})
+                return jsonify({"message":"Cannot post another ride"})
 
     
 
