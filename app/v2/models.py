@@ -182,8 +182,8 @@ class Request (DB):
             ride_id INT NOT NULL, 
             requestor_id INT NOT NULL, 
             request_status VARCHAR(140) NOT NULL,
-            FOREIGN KEY (ride_id) REFERENCES rides (id),
-            FOREIGN KEY (requestor_id) REFERENCES users (id)
+            FOREIGN KEY (ride_id) REFERENCES rides (id) ON DELETE CASCADE,
+            FOREIGN KEY (requestor_id) REFERENCES users (id) ON DELETE CASCADE
         );
         """)
 
