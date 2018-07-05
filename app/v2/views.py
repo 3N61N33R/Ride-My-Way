@@ -163,6 +163,10 @@ def create_request(id):
     user = User()
     user.get_by_username(username).id
 
+    if ride.driver.id == user.id:
+        return jsonify({"message" : "You cannot request your own ride"}), 400
+
+
     if not ride:
         return jsonify({"message" : "Ride does not exist"}), 400
 
