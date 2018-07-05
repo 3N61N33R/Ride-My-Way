@@ -1,8 +1,11 @@
-from flask import request, jsonify 
+from flask import request, jsonify, abort 
+from datetime import datetime
+from dateutil import parser
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
 from validate_email import validate_email
 from .models import User, Ride
 from . import v2
+import re
 
 
 @v2.route('/api/v2/auth/signup', methods = ['POST'])
@@ -13,12 +16,18 @@ def create_user():
     email = data.get('email')
     password = data.get('password')
 
+
+
     if username is not None and username.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
+
     if name is not None and name.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
-    if not validate_email(email):
+
+    EMAIL_REGEX = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$]")
+    if not EMAIL_REGEX.match(email):
         return jsonify({"message" : "Please enter a valid email"}), 400
+
     if password is not None and password.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
 
@@ -58,10 +67,26 @@ def create_ride():
     time = data.get('time')  
 
     username = get_jwt_identity()
-    driver = User()
+    driver = User().get_by_username(username)
 
     if not driver:
         return jsonify({"message" : "Invalid driver"}), 400
+
+    # s_time = datetime.strptime(time, "%Y-%m-%d %H:%M%S")
+    s_time = parser.parse(time)
+    if s_time < datetime.now():
+        return jsonify({"message":"Camt post in the poast"})
+    driver_rides = Ride()
+    driveride = driver_rides.get_by_user(driver.id)
+    if driveride:
+        for ride in driveride:
+            # d_time = parser.parse(ride.time)
+            diff = s_time - ride.time
+            if diff.seconds < 18000:
+                return jsonify({"meaasge":"exapil"})
+
+    
+
 
     if pickup is not None and pickup.strip() == "":
         return jsonify({"message" : "Please fill in all the fields"}), 400
@@ -71,7 +96,7 @@ def create_ride():
         return jsonify({"message" : "Please fill in all the fields"}), 400
 
     ride = Ride(pickup = pickup , dropoff = dropoff,  time=time)
-    ride.add(driver.get_by_username(username).id)
+    ride.add(driver.id)
     return jsonify({
                 "message" : "Ride created successfully"}), 201
 
@@ -120,7 +145,7 @@ def update_ride(id):
     
     ride.update()
     return (jsonify({
-                "message" : "Ride updated successfully"}), 201)
+                "message" : "Ride updated successfully"}), 202)
 
 
 @v2.route('/api/v2/ride/<int:id>',  methods = ['DELETE'])
