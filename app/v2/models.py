@@ -2,7 +2,7 @@ import psycopg2
 from flask import current_app
 from werkzeug.security import generate_password_hash, \
      check_password_hash
-
+import sys
 
 class DB:
     def __init__(self, app=None):
@@ -57,11 +57,13 @@ class User(DB):
         self.commit()
 
     def get_by_id(self, _id):
-        self.cur.execute("SELECT * FROM users WHERE id=%s", (_id,))
-        self.commit()
-        user = self.get()
-        return self.make_user(user)
-
+        try:
+            self.cur.execute("SELECT * FROM users WHERE id=%s",(_id,))
+            # self.commit()
+            user = self.get()
+            return self.make_user(user)
+        except Exception as e:
+            raise e
     def get_by_username(self, username):
         self.cur.execute("SELECT * FROM users WHERE username=%s", (username,))
         self.commit()
@@ -76,7 +78,7 @@ class User(DB):
         self.username = user[2]
         self.email = user[3]
         self.password = user[4]
-
+    
         return self
 
     def serialize(self):
@@ -140,10 +142,10 @@ class Ride(DB):
      
 
     def update(self):
-        self.cur.execute("UPDATE rides SET pickup=%s, dropoff=%s, time=%s where id=%s", (self.pickup, self.dropoff, self.time, self.id))
+        self.cur.execute("UPDATE rides SET pickup=%s, dropoff=%s, time=%s where id=%s", 
+        (self.pickup, self.dropoff, self.time, self.id))
         self.commit()
-        # try cool stuff
-        # 
+        
     def make_ride(self, ride):
         self.id = ride[0]
         self.driver = User().get_by_id(ride[1])
@@ -167,4 +169,60 @@ class Ride(DB):
         self.cur.execute("DELETE FROM rides WHERE id=%s;", (ride_id,))
         self.commit()
         
+class Request (DB):
+    def __init__(self, user = None, ride = None):
+        super().__init__()
+        self.user = user
+        self.ride = ride
+        self.request_status = "pending"
+
+    def create(self):
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS ride_requests(
+            id SERIAL PRIMARY KEY NOT NULL, 
+            ride_id INT NOT NULL, 
+            requestor_id INT NOT NULL, 
+            request_status VARCHAR(140) NOT NULL,
+            FOREIGN KEY (ride_id) REFERENCES rides (id),
+            FOREIGN KEY (requestor_id) REFERENCES users (id)
+        );
+        """)
+
+        self.commit()
+
+    def add(self):
+        self.cur.execute("INSERT INTO ride_requests (ride_id, requestor_id, request_status) VALUES (%s, %s, %s)", 
+        (self.ride.id, self.user.id, self.request_status))
+        self.commit()
+
+    def get_all_requests(self, _id):
+        self.cur.execute("SELECT id, ride_id, requestor_id, request_status FROM ride_requests WHERE ride_id=%s", (_id,))
+        request_ride = self.all()
+        return [self.make_request(request).serialize() for request in request_ride]
+
+    def make_request(self, request_ride):
+        self.id = request_ride[0]
+        self.ride = Ride().get_one(request_ride[1])
+        self.user = User().get_by_id(request_ride[2])
+        self.request_status = request_ride[3]
+
+        return self
+    
+    def serialize(self):
+        return {
+            "user": self.user.serialize(),
+            'ride': self.ride.serialize(),
+            "request_status":self.request_status,
+            "id" :self.id
+
+        }
+
+    def get_one_request(self, ride_id, request_id):
+        self.cur.execute("SELECT * FROM ride_requests WHERE ride_id=%s and id=%s", (str(ride_id), str(request_id)))
+        request_ride = self.get()
+
+        return self.make_request(request_ride)
+
+    
+
+
 
