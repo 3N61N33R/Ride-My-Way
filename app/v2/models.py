@@ -17,6 +17,10 @@ class DB:
 
     def all(self):
         return self.cur.fetchall()
+    
+    def drop(self, tablename):
+        self.cur.execute('DROP TABLE IF EXISTS {} CASCADE'.format(tablename))
+        self.commit()
 
     def close(self):
         self.cur.close()
@@ -45,6 +49,8 @@ class User(DB):
         );
         """)
         self.commit()
+
+    
 
     def add(self):
         self.cur.execute("INSERT INTO users (name, username, email, password) VALUES (%s, %s, %s, %s)", (self.name, self.username, self.email, self.password))
