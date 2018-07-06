@@ -2,7 +2,6 @@ from flask import request, jsonify, abort
 from datetime import datetime
 from dateutil import parser
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
-from validate_email import validate_email
 from .models import User, Ride
 from . import v2
 import re
