@@ -2,7 +2,6 @@ from flask import request, jsonify, abort
 from datetime import datetime
 from dateutil import parser
 from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
-from validate_email import validate_email
 from .models import User, Ride, Request
 from . import v2
 import re
@@ -43,10 +42,12 @@ def login():
         return jsonify({"msg": "Missing JSON in request"}), 400
     username = request.json.get('username')
     password = request.json.get('password')
+
     if not username:
         return jsonify({"msg": "Missing username parameter"}), 400
     if not password:
         return jsonify({"msg": "Missing password parameter"}), 400
+        
     user = User().get_by_username(username)
     if not user:
         return jsonify({"msg":"Invalid username or password"}), 401
@@ -61,6 +62,21 @@ def login():
 @v2.route('/api/v2/rides',  methods = ['POST'])
 @jwt_required
 def create_ride():
+    """
+    Endpoint for creating a ride
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: Ride not created successfuly'
+    """
     data = request.get_json()
     pickup = data.get('pickup')
     dropoff = data.get('dropoff')
@@ -103,6 +119,21 @@ def create_ride():
 @v2.route('/api/v2/rides')
 @jwt_required
 def get_rides():
+    """
+    Endpoint for getting rides
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There are no rides to display'
+    """
     trip = Ride()
     
     return jsonify({'rides':[ride.serialize() for ride in trip.get_all()]})
@@ -111,6 +142,21 @@ def get_rides():
 @v2.route('/api/v2/ride/<int:id>', methods = ['GET'])
 @jwt_required
 def get_ride(id):
+    """
+    Endpoint for getting a ride
+    ---
+    tags:
+      - Rides
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There is no ride to display'
+    """
     trip = Ride()
     ride =  trip.get_one(id)
 
@@ -148,6 +194,21 @@ def update_ride(id):
 @v2.route('/api/v2/ride/<int:id>',  methods = ['DELETE'])
 @jwt_required
 def delete_ride(id):
+    """
+    Endpoint for deleting a ride
+    ---
+    tags:
+      - Ride
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      200:
+        description: Fetch successfull
+      404:
+        description: There are no rides to display'
+    """
     r = Ride().get_one(id)
     if r:
         r.delete(id)
@@ -163,12 +224,14 @@ def create_request(id):
     user = User()
     user.get_by_username(username).id
 
+    if not ride:
+        return jsonify({"message" : "Ride does not exist"}), 400
+
     if ride.driver.id == user.id:
         return jsonify({"message" : "You cannot request your own ride"}), 400
 
 
-    if not ride:
-        return jsonify({"message" : "Ride does not exist"}), 400
+    
 
 
     req = Request(ride= ride , user = user)
@@ -181,6 +244,18 @@ def get_requests(id):
     query = Request()
     
     return jsonify({'requests':[request for request in query.get_all_requests(id)]})
+
+@v2.route('/api/v2/ride/<int:id>/request/<int:request_id>')
+@jwt_required
+def get_request(id,request_id):
+    query = Request()
+    request = query.get_one_request(id,request_id)
+    
+    if not request:
+        return jsonify ({"message":"request you entered does not exist"})
+
+    return jsonify ({'request': request.serialize()})
+
 
 
 

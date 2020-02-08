@@ -8,10 +8,6 @@ from app.v2.models import User, Ride
 class BaseTest(TestCase):
     def setUp(self):
 
-        # ride = Ride()
-        # ride.create ("7","Fedha","Greenfiels"," 10:00a.m")
-
-        # user = User()
         app.config.from_object(app_config['testing'])
         self.app = app.test_client()
         ctx = app.app_context()
