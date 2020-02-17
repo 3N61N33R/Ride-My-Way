@@ -17,7 +17,7 @@ Navigate to Ride-My-Way directory you just cloned: `cd Ride-My-Way/UI`
 Run index.html file in your browser.
 
 UI link to gh-pages:
-https://missgray.github.io/Ride-My-Way/
+https://graycadeau.github.io/Ride-My-Way/
 
 ## Installation - API
 
