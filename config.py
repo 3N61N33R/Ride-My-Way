@@ -8,10 +8,10 @@ class Config:
     Common configurations
     """ 
     DEBUG = True
-    SECRET_KEY = "txex"
-    DBNAME = "ride_my_way"
-    DBUSER = "zawi"
-    DBPASSWORD = "password"
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    DBNAME = os.environ.get("DBNAME")
+    DBUSER = os.environ.get("DBUSER")
+    DBPASSWORD = os.environ.get("DBPASSWORD")
 
 class DevelopmentConfig(Config):
     """
@@ -24,7 +24,7 @@ class TestingConfig(Config):
     Testing configurations
     """
     TESTING = True
-    DBNAME = "testdb"
+    DBNAME = os.environ.get("TEST_DBNAME")
 
 class ProductionConfig(Config):
     """

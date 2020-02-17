@@ -1,10 +1,13 @@
-from flask import request, jsonify, abort 
-from datetime import datetime
-from dateutil import parser
-from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
-from .models import User, Ride, Request
-from . import v2
 import re
+from datetime import datetime
+
+from dateutil import parser
+from flask import abort, jsonify, request
+from flask_jwt_extended import (create_access_token, get_jwt_identity,
+                                jwt_required)
+
+from . import v2
+from .models import Request, Ride, User
 
 
 @v2.route('/api/v2/auth/signup', methods = ['POST'])
@@ -255,12 +258,3 @@ def get_request(id,request_id):
         return jsonify ({"message":"request you entered does not exist"})
 
     return jsonify ({'request': request.serialize()})
-
-
-
-
-
-
-
-
-    
