@@ -10,6 +10,7 @@ class Config:
     DEBUG = True
     SECRET_KEY = os.environ.get("SECRET_KEY")
     DBNAME = os.environ.get("DBNAME")
+    print(DBNAME)
     DBUSER = os.environ.get("DBUSER")
     DBPASSWORD = os.environ.get("DBPASSWORD")
 
@@ -24,7 +25,7 @@ class TestingConfig(Config):
     Testing configurations
     """
     TESTING = True
-    DBNAME = os.environ.get("TEST_DBNAME")
+    DBNAME = "testdb"
 
 class ProductionConfig(Config):
     """
