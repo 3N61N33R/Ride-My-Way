@@ -10,6 +10,16 @@ install:
 # command to run tests
 script:
   - python3 -m pytest --cov-report term --cov=app 
+  
+before_script:
+  - psql -c 'create database testdb;' -U postgres
+
+services:
+  - postgresql
+  - memcached
+
+addons:
+  postgresql: "9.4"
 
 after_success:
   - coveralls
