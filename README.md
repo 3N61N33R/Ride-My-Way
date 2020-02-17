@@ -10,7 +10,7 @@ and passengers to join available ride offers.
 
 To get a view of the front-end UI, do the following:
 
-Clone the repository into your local environment: git clone `https://github.com/MissGray/Ride-My-Way.git`
+Clone the repository into your local environment: git clone `https://github.com/graycadeau/Ride-My-Way.git`
 
 Navigate to Ride-My-Way directory you just cloned: `cd Ride-My-Way/UI`
 
@@ -32,7 +32,7 @@ Recommended set up on your local environment before getting started
 
 Do the following:
 
-1. Clone the repo into a folder of your choice: `git clone https://github.com/MissGray/Ride-My-Way.git` from your local terminal
+1. Clone the repo into a folder of your choice: `git clone https://github.com/graycadeau/Ride-My-Way.git` from your local terminal
 2. Navigate to the cloned folder `cd Ride-My-Way`
 3. Create a virtual environment `virtualenv venv`
 4. Activate the virtual environment `source venv/bin/activate`
