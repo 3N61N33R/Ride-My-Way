@@ -1,4 +1,3 @@
-import psycopg2
 from unittest import TestCase
 from flask import current_app
 from app import app 
