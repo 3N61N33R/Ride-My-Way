@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "==1.9.2"
+black = "*"
 
 [packages]
 flasgger = "==0.9.4"
