@@ -19,8 +19,5 @@ services:
   - postgresql
   - memcached
 
-addons:
-  postgresql: "11"
-
 after_success:
   - coveralls
