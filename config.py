@@ -10,7 +10,6 @@ class Config:
     DEBUG = True
     SECRET_KEY = os.environ.get("SECRET_KEY")
     DBNAME = os.environ.get("DBNAME")
-    print(DBNAME)
     DBUSER = os.environ.get("DBUSER")
     DBPASSWORD = os.environ.get("DBPASSWORD")
 
