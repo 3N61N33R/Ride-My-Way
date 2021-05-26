@@ -1,7 +1,8 @@
 language: python
 python:
   - "3.7"
-  
+
+dist: focal
 
 install:
   - pip3 install pipenv
@@ -19,7 +20,7 @@ services:
   - memcached
 
 addons:
-  postgresql: "9.4"
+  postgresql: "12"
 
 after_success:
   - coveralls

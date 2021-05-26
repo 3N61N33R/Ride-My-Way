@@ -31,8 +31,8 @@ class TestingConfig(Config):
 
     TESTING = True
     DBNAME = "testdb"
-    DBUSER = "testuser"
-    DBPASSWORD = "testpassword"
+    # DBUSER = "testuser"
+    # DBPASSWORD = "testpassword"
 
 
 class ProductionConfig(Config):
